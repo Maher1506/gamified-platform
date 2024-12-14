@@ -397,7 +397,8 @@ CREATE TABLE Quest (
     difficulty_level VARCHAR(50),
     criteria VARCHAR(100),
     description VARCHAR(100),
-    title VARCHAR(50)
+    title VARCHAR(50),
+    deadline datetime ,
 );
 
 -- 36
