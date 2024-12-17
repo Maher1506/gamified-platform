@@ -32,6 +32,37 @@ namespace GamifiedPlatform.Controllers
 
             return View(instructor);
         }
+        public IActionResult GetAllLeaderboards()
+        {
+
+
+            // Execute the stored procedure to get notifications
+            var leaderboards = _context.Leaderboards
+                .FromSqlRaw("EXEC getAllLeaderBoards ")
+                .ToList();
+
+
+
+            return View(leaderboards);
+        }
+        public IActionResult LeaderboardRank(int leaderboardID)
+        {
+
+
+
+
+            // Execute the stored procedure to get notifications
+            var boards = _context.Rankings
+                .FromSqlRaw($"EXEC LeaderboardRank @LeaderboardID={leaderboardID}")
+                .ToList();
+
+            // Pass the learnerId to ViewBag for "Back to Profile" button
+
+
+            return View(boards);
+        }
+
+        // Action to fi
         public async Task<IActionResult> UpdateInfo(int instructorID,string name,string latest_qualification, string expertise_area, string email)
             
         {

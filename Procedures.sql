@@ -6,6 +6,25 @@ AS
 begin
 insert into InstructorDiscussion(ForumID,InstructorID,Post,time) values (@DiscussionID,@instructorID,@Post,GETDATE());
 end
+	
+Go
+create proc getAllGoals
+As
+select*
+from Learning_goal
+
+	Go
+create proc getAllLeaderBoards
+AS
+select *
+from Leaderboard
+	
+	Go
+create proc getSpecificLearnerGoals(@learnerID int)
+As
+select*
+from LearnersGoals
+where LearnerID=@learnerID
 
 Go
 create proc markAsRead(@notificationID int)
@@ -34,18 +53,61 @@ AS
 BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
-
-        -- Example manual deletions
-        DELETE FROM LearnerMastery WHERE LearnerID = @LearnerID;
-        DELETE FROM LearnersCollaboration WHERE LearnerID = @LearnerID;
-
-        -- Cascade delete handled here
+        DECLARE @UserID INT;
+        -- Retrieve the UserID corresponding to the LearnerID
+        SELECT @UserID = UserID 
+        FROM Learner 
+        WHERE LearnerID = @LearnerID;
+        -- Check if the Learner exists
+        IF @UserID IS NULL
+        BEGIN
+            PRINT 'Learner does not exist.';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+        -- Delete the learner
         DELETE FROM Learner WHERE LearnerID = @LearnerID;
-
+        -- Delete the corresponding user
+        DELETE FROM Users WHERE UserID = @UserID;
         COMMIT TRANSACTION;
+        PRINT 'Learner and corresponding user deleted successfully.';
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION;
+        PRINT 'Error occurred during deletion: ' + ERROR_MESSAGE();
+        THROW;
+    END CATCH
+END;
+
+GO
+CREATE PROCEDURE DeleteInstructor
+    @InstructorID INT
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
+        DECLARE @UserID INT;
+        -- Retrieve the UserID corresponding to the InstructorID
+        SELECT @UserID = UserID 
+        FROM Instructor 
+        WHERE InstructorID = @InstructorID;
+        -- Check if the Instructor exists
+        IF @UserID IS NULL
+        BEGIN
+            PRINT 'Instructor does not exist.';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+        -- Delete the Instructor
+        DELETE FROM Instructor WHERE InstructorID = @InstructorID;
+        -- Delete the corresponding user
+        DELETE FROM Users WHERE UserID = @UserID;
+        COMMIT TRANSACTION;
+        PRINT 'Instructor and corresponding user deleted successfully.';
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        PRINT 'Error occurred during deletion: ' + ERROR_MESSAGE();
         THROW;
     END CATCH
 END;
@@ -521,14 +583,15 @@ exec Moduletraits 'Creativity',3
 --6
 go
 create procedure LeaderboardRank
-@LeaderboardID int
+@LeaderboardID int , @learnerID int
 as
 begin 
-select l.first_name,l.last_name ,r.rank,r.total_points
-from Learner l inner join Ranking r on l.LearnerID=r.LearnerID
-where r.BoardID=@LeaderboardID
+select r.BoardID,r.CourseID,r.LearnerID,r.rank,r.total_points
+from Ranking r 
+where r.BoardID=@LeaderboardID AND r.LearnerID=@learnerID
 order by r.rank
 end
+
 
 exec LeaderboardRank 4
 
@@ -840,7 +903,7 @@ Go
 create proc  LeaderboardFilter(@LearnerID int)
 AS
 Begin 
-select l.BoardID,l.season,c.Title as course,r.total_points,r.rank
+select r.LearnerID, r.BoardID,r.CourseID,r.total_points,r.rank
 from Leaderboard l inner join Ranking r on l.BoardID=r.BoardID inner join Course c on r.CourseID=c.CourseID
 where LearnerID=@LearnerID 
 order by rank desc
