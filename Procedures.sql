@@ -760,25 +760,14 @@ AS
 BEGIN
     
     SELECT 
-        Q.QuestID,
-        Q.title AS QuestTitle,
-        C.deadline AS deadline,
+        
+        Lc.QuestID ,
         LC.completion_status AS QuestCompletionStatus
-    FROM Collaborative C inner join LearnersCollaboration LC ON C.QuestID = LC.QuestID
-    inner join Quest Q ON C.QuestID = Q.QuestID
-    WHERE LC.LearnerID = @LearnerID AND C.deadline > GETDATE() 
-    
+    FROM LearnersCollaboration LC
+   
+    WHERE LC.LearnerID = @LearnerID 
+    End
 
-    
-    SELECT 
-        B.BadgeID,
-        B.title AS BadgeTitle,
-        A.date_earned AS DateEarned,
-        B.criteria AS BadgeCriteria
-    FROM Achievement A inner join Badge B ON A.BadgeID = B.BadgeID
-    WHERE A.LearnerID = @LearnerID
-    
-END
 exec QuestProgress 1
 --Learner18
 Go
