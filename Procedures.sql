@@ -762,11 +762,12 @@ BEGIN
     SELECT 
         Lc.LearnerID,
         Lc.QuestID ,
-        LC.completion_status AS QuestCompletionStatus
+        LC.completion_status 
     FROM LearnersCollaboration LC
    
     WHERE LC.LearnerID = @LearnerID 
     End
+
 
 
 exec QuestProgress 1
