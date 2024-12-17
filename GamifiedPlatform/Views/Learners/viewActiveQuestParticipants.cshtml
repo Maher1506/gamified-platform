@@ -1,0 +1,31 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Active Quest Participants";
+}
+
+<h2>Active Quest Participants</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Learner ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var participant in Model)
+        {
+            <tr>
+                <td>@participant.LearnerId</td>
+                <td>@participant.FullName</td>
+                <td>@participant.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Dashboard" asp-route-id="@ViewBag.LearnerId" class="btn btn-secondary">
+    Back to Dashboard
+</a>
