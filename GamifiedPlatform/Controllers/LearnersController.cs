@@ -47,6 +47,19 @@ namespace GamifiedPlatform.Controllers
 
             return View(goals);
         }
+        public IActionResult MonitorQuests(int learnerID) {
+            var learnerIdParam = new SqlParameter("@LearnerID", learnerID);
+
+            // Execute the stored procedure to get notifications
+            var path = _context.LearnersCollaborations
+                .FromSqlRaw("EXEC QuestProgress @LearnerID", learnerIdParam)
+                .ToList();
+
+            // Pass the learnerId to ViewBag for "Back to Profile" button
+            ViewBag.LearnerId = learnerID;
+
+            return View(path);
+        }
         public IActionResult GetAllLeaderboards() {
             
 
@@ -59,6 +72,38 @@ namespace GamifiedPlatform.Controllers
 
             return View(leaderboards);
         }
+        //public Task<IActionResult> Partici
+
+
+        public async Task<IActionResult> ViewActiveQuestParticipants(int learnerId)
+        {
+            // Fetch the active quest ID for the learner
+            var activeQuestId = await _context.LearnersCollaborations
+                .Where(lc => lc.LearnerId == learnerId)
+                .Select(lc => lc.QuestId)
+                .FirstOrDefaultAsync();
+
+            if (activeQuestId == 0)
+            {
+                TempData["ErrorMessage"] = "No active quests found for this learner.";
+                return RedirectToAction("Profile", new { id = learnerId });
+            }
+
+            // Get all participants in the same active quest
+            var participants = await _context.LearnersCollaborations
+                .Where(lc => lc.QuestId == activeQuestId)
+                .Select(lc => new
+                {
+                    LearnerId = lc.Learner.LearnerId,
+                    FullName = lc.Learner.FirstName + " " + lc.Learner.LastName,
+                    Email = lc.Learner.Email
+                })
+                .ToListAsync();
+
+            ViewBag.LearnerId = learnerId;
+            return View(participants); // Ensure you have a corresponding Razor view for this action
+        }
+
         public IActionResult LeaderboardRank(int leaderboardID)
         {
            

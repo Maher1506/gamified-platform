@@ -816,6 +816,7 @@ end
 
 exec QuestMembers 1
 
+drop Procedure QuestProgress
 --Learner17
 Go
 create proc QuestProgress (@LearnerID INT)

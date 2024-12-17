@@ -1,0 +1,44 @@
+﻿@model IEnumerable<GamifiedPlatform.Models.LearnersCollaboration>
+
+@{
+    ViewData["Title"] = "Monitor Quest Progress";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Quest Progress</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Quest ID</th>
+                    <th>Completion Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var quest in Model)
+                {
+                    <tr>
+
+                        <td>@quest.QuestId</td>
+                        <td>@quest.CompletionStatus</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            No quests found for this learner.
+        </div>
+    }
+
+    <!-- Back to Profile Button -->
+    <div class="text-center mt-3">
+        <a asp-action="Dashboard" asp-route-learnerId="@ViewBag.LearnerId" class="btn btn-secondary">
+            Back to Dashboard
+        </a>
+    </div>
+</div>
