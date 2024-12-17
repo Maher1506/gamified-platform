@@ -583,12 +583,12 @@ exec Moduletraits 'Creativity',3
 --6
 go
 create procedure LeaderboardRank
-@LeaderboardID int
+@LeaderboardID int , @learnerID int
 as
 begin 
 select r.BoardID,r.CourseID,r.LearnerID,r.rank,r.total_points
 from Ranking r 
-where r.BoardID=@LeaderboardID
+where r.BoardID=@LeaderboardID AND r.LearnerID=@learnerID
 order by r.rank
 end
 
