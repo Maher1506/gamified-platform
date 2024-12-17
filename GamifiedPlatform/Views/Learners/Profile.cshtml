@@ -41,6 +41,7 @@
                 <input type="hidden" name="LearnerId" value="@Model.LearnerId" />
                 <button type="submit" class="btn btn-outline-danger btn-sm" style="min-width: 140px;">Delete Account</button>
             </form>
+            <a asp-action="ViewActiveQuestParticipants" asp-route-learnerId="@Model.LearnerId" class="btn btn-outline-info">View Active Quest</a>
         </div>
     </div>
 
@@ -82,6 +83,18 @@
         <div class="card-body text-center">
             <p>Explore the personalization profiles associated with this learner.</p>
             <a asp-action="ViewPersonalizationProfiles" asp-route-learnerId="@Model.LearnerId" class="btn btn-warning">View Profiles</a>
+        </div>
+    </div>
+    <!-- Monitor Quests Card -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white text-center">
+            <h3>Monitor Quests</h3>
+        </div>
+        <div class="card-body text-center">
+            <p>Track the progress of all quests related to this learner.</p>
+            <a asp-action="MonitorQuests" asp-route-learnerID="@Model.LearnerId" class="btn btn-primary">
+                Monitor Quests
+            </a>
         </div>
     </div>
 
@@ -207,7 +220,9 @@
             }
         </div>
     </div>
-    
+    <div class="card-body text-center">
+        <a asp-controller="Quests" asp-action="viewCustom" class="btn btn-outline-secondary w-100">View Quests</a>
+    </div>
 </div>
 <div class="card shadow-sm mb-4">
     <div class="card-header bg-info text-white text-center">
