@@ -760,13 +760,14 @@ AS
 BEGIN
     
     SELECT 
-        
+        Lc.LearnerID,
         Lc.QuestID ,
         LC.completion_status AS QuestCompletionStatus
     FROM LearnersCollaboration LC
    
     WHERE LC.LearnerID = @LearnerID 
     End
+
 
 exec QuestProgress 1
 --Learner18
