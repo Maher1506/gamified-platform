@@ -80,8 +80,8 @@ VALUES
 --Insertion into PersonalizationProfiles 
 INSERT INTO PersonalizationProfiles (LearnerID, ProfileID, Prefered_content_type, emotional_state, personality_type)
 VALUES 
-(1, 101, 'Video', 'Happy', 'Extrovert'),
-(2, 102, 'Text', 'Focused', 'Introvert'),
+(10, 101, 'Video', 'Happy', 'Extrovert'),
+(10, 102, 'Text', 'Focused', 'Introvert'),
 (3, 103, 'Interactive', 'Calm', 'Ambivert'),
 (4, 104, 'Audio', 'Excited', 'Extrovert'),
 (5, 105, 'Visual', 'Anxious', 'Introvert')
@@ -553,8 +553,8 @@ values(1,2,96),
 (4,1,22)
 
 insert into takesassesment
-values(7,1,96),
-(7,2,20)
+values(10,1,96),
+(10,2,20)
 
 
 
