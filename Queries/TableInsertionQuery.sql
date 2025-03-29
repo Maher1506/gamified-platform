@@ -555,7 +555,3 @@ values(1,2,96),
 insert into takesassesment
 values(10,1,96),
 (10,2,20)
-
-
-
-
